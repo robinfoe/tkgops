@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postcreate-vapex
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    metadata:
+      name: postcreation
+    spec:
+      containers:
+        - name: postcreation
+          image: bitnami/kubectl
+          args:
+            - "--kubeconfig=/.kube/value"
+            - "apply"
+            - "--recursive"
+            - "-f"
+            - "/tmp/postcreate"
+          volumeMounts:
+            - name: kubeconfig
+              mountPath: "/.kube"
+            - name: postcreate-psp
+              mountPath: "/tmp/postcreate/00"
+      restartPolicy: Never
+      volumes:
+        - name: kubeconfig
+          secret:
+            secretName: ${CLUSTERNAME}-kubeconfig
+        - name: postcreate-psp
+          secret:
+            secretName: ${CLUSTERNAME}-postcreate-podsecuritypolicy

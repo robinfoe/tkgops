@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postcreate-calico-vapex
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    metadata:
+      name: postcreation
+    spec:
+      containers:
+        - name: postcreation
+          image: bitnami/kubectl
+          args:
+            - "--kubeconfig=/.kube/value"
+            - "apply"
+            - "-f"
+            - "/tmp/calicoYaml"
+          volumeMounts:
+            - name: kubeconfig
+              mountPath: "/.kube"
+            - name: postcreate
+              mountPath: "/tmp"
+      restartPolicy: Never
+      volumes:
+        - name: kubeconfig
+          secret:
+            secretName: ${CLUSTERNAME}-kubeconfig
+        - name: postcreate
+          secret:
+            secretName: ${CLUSTERNAME}-postcreate
