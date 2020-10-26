@@ -1,0 +1,10 @@
+commonLabels:
+  tkg-cluster: newton
+resources:
+  - namespace.yaml
+  - cluster.yaml
+  - postcreation_calico_job.yaml
+  - postcreation_job.yaml
+  - psp_policy.yaml
+patches:
+  - path: apiserver-psp.yaml
