@@ -28,7 +28,7 @@ spec:
       volumes:
         - name: kubeconfig
           secret:
-            secretName: ${CLUSTERNAME}-kubeconfig
+            secretName: newton-kubeconfig
         - name: postcreate-psp
           secret:
-            secretName: ${CLUSTERNAME}-postcreate-podsecuritypolicy
+            secretName: newton-postcreate-podsecuritypolicy

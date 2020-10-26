@@ -27,7 +27,7 @@ spec:
       volumes:
         - name: kubeconfig
           secret:
-            secretName: ${CLUSTERNAME}-kubeconfig
+            secretName: newton-kubeconfig
         - name: postcreate
           secret:
-            secretName: ${CLUSTERNAME}-postcreate
+            secretName: newton-postcreate
